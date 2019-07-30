@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)https://getbootstrap.com/docs/4.0/examples/dashboard/# -->
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="/static/images/phkj.jpg">
+
+  <title>果壳</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/fontawesome-all.min.css">
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <script src="/static/js/jquery-3.3.1.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+</head>
+
+<body class="vsc-initialized">
+<div class="container">
+  <form>
+    <div class="form-group">
+      <label for="formGroupExampleInput">姓名</label>
+      <input type="text" class="form-control" id="formGroupExampleInput" placeholder="">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">性别</label>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+        <label class="form-check-label" for="exampleRadios1">
+          帅哥
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+        <label class="form-check-label" for="exampleRadios2">
+          美女
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput">年龄</label>
+      <select class="form-control" id="exampleFormControlSelect1">
+        {% for i in range(20, 30) %}
+        <option>{{ i }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">身高</label>
+      <select class="form-control" id="exampleFormControlSelect1">
+        {% for i in range(20, 30) %}
+          <option>{{ i }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput">专业</label>
+      <input type="text" class="form-control" id="formGroupExampleInput" placeholder="">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">家乡</label>
+      <select class="form-control" id="exampleFormControlSelect1">
+        {% set x = ['北京', '天津', '河北省', '山西省', '内蒙古自治区', '辽宁省', '吉林省', '黑龙江省', '上海', '江苏省', '浙江省', '安徽省', '福建省', '江西省', '山东省', '河南省', '湖北省', '湖南省', '广东省', '广西壮族自治区', '海南省', '重庆', '四川省', '贵州省', '云南省', '西藏自治区', '陕西省', '甘肃省', '青海省', '宁夏回族自治区', '新疆维吾尔自治区'] %}
+        {% for i in x %}
+          <option>{{ i }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">兴趣</label>
+      <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">兴趣</label>
+      <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">性格</label>
+      <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput">理想</label>
+      <input type="text" class="form-control" id="formGroupExampleInput" placeholder="">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">生活照</label>
+      <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="">
+    </div>
+    <button type="submit" class="btn btn-primary">Sign in</button>
+  </form>
+  <!-- Content here -->
+</div>
+</body>
+
+</html>
