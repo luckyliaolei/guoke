@@ -2,7 +2,7 @@
 __pycache__/
 nohup.out
 .DS_Store
-chunks/
+picture/
 src/
 tmp/
 .uuid

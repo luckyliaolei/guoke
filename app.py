@@ -6,10 +6,11 @@ import hashlib
 @app.route('/user_info', methods=['GET', 'POST'])
 def hello_world():
     if request.method == 'POST':
-        users.insert_one(dict(request.form))
+        user_info = dict(request.form)
+        users.insert_one(user_info)
         f = request.files['picture']
-        f.save('picture/' + f.filename)
-        return 'ok'
+        f.save('picture/' + str(user_info['_id']) + '.jpg')
+        return render_template('success.html')
     else:
         return render_template('index.html')
 
