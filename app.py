@@ -72,7 +72,7 @@ class Msg_handle:
 
         if self.msg.type == 'event':
             if self.msg.event == 'subscribe' :
-                return self.text_reply('感谢你关注本订阅号，我们承诺不泄露隐私信息，你的信息将会在取消关注本订阅号后自动删除，回复“资料”即可开始填写，你也可以通过访问<a href="www.nipc.org.cn:24250">个人资料填写</a>通过网页填写。')
+                return self.text_reply('感谢你关注本订阅号，我们承诺不泄露隐私信息，你的信息将会在取消关注本订阅号后自动删除，回复“资料”即可开始填写。由于公众号的限制我们不能主动给你发消息，只能被动恢复消息，所以并不是我们不理你。有事儿没事儿多回复“在吗”，将会有不一样的惊喜等着你哦。')
             elif self.msg.event == "unsubscribe":
                 pass
             else:
@@ -109,25 +109,29 @@ class Msg_handle:
                 # todo
                 pass
 
-            return self.text_reply('你好，是不是有点无聊了，你好像还没上传资料，要不然回复“资料”开始上传？你也可以通过用我们的网页进行填写。<a href="http://www.nipc.org.cn:24255?user_id=' + self.msg.source + '">点我试试</a>')
-
+            if not user.get('profile'):
+                return self.text_reply('你好，是不是有点无聊了，你好像还没上传资料，要不然回复“资料”启动信息采集程序？')
+            if not user.get('condition'):
+                return self.text_reply('你好，是不是有点无聊了，你好像还没上传择偶条件，要不然回复“条件”启动信息采集程序？')
+            return self.text_reply('没事儿干了吗，可以回答问题玩哦，你的回答将会被我们推送到我们算法给你匹配到的跟你合适的人的那里，如果Ta对你的回答感兴趣，我们也会推送他的消息给你哦，当你们的熟悉程度到达一定值后，我们将互相推送微信号，在此之前你们所有信息都是匿名的哦，回复“问题”查看问题列表')
 
     def answer(self, question_id, question_index):
         last_qu, next_qu = questions.find_one({
             '_id': question_id}, {'content': {'$slice': [question_index, 2]}})['content']
 
-        # 下面是验证答案的有效性。
-        if self.msg.type == 'text' and self.msg.content.lower() == 'j':
+        if self.msg.type == 'text' and self.msg.content == '过':
             users.update_one({
                 '_id': self.msg.source}, {
                 '$set': {
                     'answering.question_index': question_index + 1}
             })
         else:
-
+            # 下面是验证答案的有效性。
+            # 类型验证
             if last_qu.get('type') != self.msg.type:
-                return self.text_reply('你的回答类型有误')
+                return self.text_reply('你的回答类型有误, 回答要求是%s类型。' % last_qu.get('type'))
 
+            # 正则验证
             regex = last_qu.get('regex')
             if regex and not re.match(regex, self.msg.content):
                 return self.text_reply(last_qu['error'])
@@ -140,7 +144,7 @@ class Msg_handle:
                     '$push': {
                         'profile.' + last_qu['filed']: self.msg.media_id}
                 })
-                return self.text_reply('再来一张？回复“j”跳过。')
+                return self.text_reply('嗯嗯，再来一张？回复“过”跳过该问题')
 
 
             users.update_one({
@@ -150,11 +154,11 @@ class Msg_handle:
                     'answering.question_index': question_index + 1}
             })
 
-        if not next_qu.get('filed'):
+        if not next_qu.get('filed'):  # 间接判断是否为最后一问，但最好还是直接判断(idx==len)以增强可读性和代码健壮性。
             users.update_one({
                 '_id': self.msg.source}, {
                 '$unset': {
-                    'answering': ''}
+                    'answering': ''}  # 最后一个问题没有答案，所以在回复之前即可删掉answering状态字段。
             })
 
         return self.text_reply(next_qu['question'])
