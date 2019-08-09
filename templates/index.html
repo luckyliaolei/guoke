@@ -1,120 +1,153 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)https://getbootstrap.com/docs/4.0/examples/dashboard/# -->
 <html lang="en">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <link rel="icon" href="/static/images/phkj.jpg">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/static/images/phkj.jpg">
+    <title>果壳</title>
 
-  <title>果壳</title>
-
-  <!-- Bootstrap core CSS -->
-  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/fontawesome-all.min.css">
-  <link rel="stylesheet" href="/static/css/styles.css">
-  <script src="/static/js/jquery-3.3.1.min.js"></script>
-  <script src="/static/js/bootstrap.min.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
 </head>
 
-<body class="vsc-initialized">
-<nav class="navbar navbar-light bg-light mb-3">
-  <h4 class="mx-auto">个人资料填写</h4>
-</nav>
+<body class="vsc-initialized bg-light">
 <div class="container">
-  <form method="post" enctype="multipart/form-data" target="_top">
-    <div class="form-group">
-      <label for="formGroupExampleInput">姓名</label>
-      <input type="text" class="form-control" name="name" placeholder="" required>
+    <div class="py-5 text-center">
+        <h2 class="mx-auto">个人资料填写</h2>
+        <p class="lead">请认真填写以下信息，我们将通过以下信息给你匹配对的人，我们不会泄露你的隐私，当你取消关注时，你的信息将从数据库中删除。</p>
     </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">性别</label>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="gender" id="exampleRadios1" value="1" checked>
-        <label class="form-check-label" for="exampleRadios1">
-          帅哥
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="gender" id="exampleRadios2" value="0">
-        <label class="form-check-label" for="exampleRadios2">
-          美女
-        </label>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput">年龄</label>
-      <select class="form-control" id="exampleFormControlSelect1">
-        {% for i in range(20, 30) %}
-        <option>{{ i }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">身高</label>
-      <select class="form-control" name="height">
-        {% for i in range(150, 200) %}
-          <option>{{ i }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput">专业</label>
-      <input type="text" class="form-control" name="major" placeholder="" required>
-    </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">家乡</label>
-      <select class="form-control" name="hometown">
-        {% set x = ['北京', '天津', '河北省', '山西省', '内蒙古自治区', '辽宁省', '吉林省', '黑龙江省', '上海', '江苏省', '浙江省', '安徽省', '福建省', '江西省', '山东省', '河南省', '湖北省', '湖南省', '广东省', '广西壮族自治区', '海南省', '重庆', '四川省', '贵州省', '云南省', '西藏自治区', '陕西省', '甘肃省', '青海省', '宁夏回族自治区', '新疆维吾尔自治区'] %}
-        {% for i in x %}
-          <option value="{{ i }}">{{ i }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">兴趣</label>
-      <input type="text" class="form-control" name="interest" placeholder="" required>
-    </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">性格</label>
-      <input type="text" class="form-control" name="character" placeholder="" required>
-    </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput">理想</label>
-      <input type="text" class="form-control" name="idea" placeholder="" required>
-    </div>
-    <div class="form-group">
-      <label for="formGroupExampleInput2">生活照</label>
-      <input type='file' id="imgInp" name="picture" hidden/>
-      <br><button type="button" id="triger_file" class="btn btn-light mb-3">点击选择图片</button>
-      <div class="text-center"><img id="picture" src="#" width="100%" alt="your image" style="display: none"/></div>
-    </div>
-    <button type="submit" class="btn btn-primary mb-3">提交</button>
-  </form>
-  <!-- Content here -->
+    <form method="post" enctype="multipart/form-data" target="_top">
+        <h4 class="mb-3">个人资料</h4>
+        <div class="form-group">
+            <label for="formGroupExampleInput">姓名</label>
+            <input type="text" class="form-control" name="name" placeholder="" required value="{{ profile.name }}">
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput2">性别</label>
+            <div class="custom-control custom-radio">
+                <input id="credit" name="gender" type="radio" class="custom-control-input" checked=""
+                       required="" value="男">
+                <label class="custom-control-label" for="credit">男</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input id="debit" name="gender" type="radio" class="custom-control-input" required="" value="女">
+                <label class="custom-control-label" for="debit">女</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput">年龄</label>
+            <input type="text" class="form-control" name="age" placeholder="" required
+                   value="{{ profile.age }}">
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput2">身高</label>
+            <input type="text" class="form-control" name="height" placeholder="" required
+                   value="{{ profile.height }}">
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput">专业</label>
+            <input type="text" class="form-control" name="major" placeholder="" required value="{{ profile.major }}">
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput2">家乡</label>
+            <select class="custom-select form-control" name="hometown">
+                {% set x = ['北京', '天津', '河北省', '山西省', '内蒙古自治区', '辽宁省', '吉林省', '黑龙江省', '上海', '江苏省', '浙江省', '安徽省', '福建省', '江西省', '山东省', '河南省', '湖北省', '湖南省', '广东省', '广西壮族自治区', '海南省', '重庆', '四川省', '贵州省', '云南省', '西藏自治区', '陕西省', '甘肃省', '青海省', '宁夏回族自治区', '新疆维吾尔自治区'] %}
+                {% for i in x %}
+                    <option value="{{ i }} {% if profile.hometown == i %}selected{% endif %}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput2">兴趣</label>
+            <input type="text" class="form-control" name="interest" placeholder="" required value="{{ profile.interest }}">
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput2">性格</label>
+            <input type="text" class="form-control" name="character" placeholder="" required value="{{ profile.personal }}">
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput">理想</label>
+            <input type="text" class="form-control" name="idea" placeholder="" required value="{{ profile.ideal }}">
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput2">生活照</label>
+            <input type="file" accept="image/jpeg" id="imgInp" name="picture" hidden/>
+            <div id="pictures" class="text-center">
+                {% for img in profile.images %}
+                    <img src="/static/picture/{{ img }}.jpg" width="100%" alt=""/>
+                {% endfor %}
+            </div>
+            <br>
+            <button type="button" id="triger_file" class="btn btn-light mb-3">点击选择图片</button>
+        </div>
+        <hr class="mb-4">
+        <h4 class="mb-3">心动条件</h4>
+        <div class="form-group">
+            <label for="formGroupExampleInput">年龄区间</label>
+            <input type="text" class="form-control" name="age" placeholder="" required
+                   value="{{ condition.age }}">
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput2">对方至少多高</label>
+            <input type="text" class="form-control" name="height" placeholder="" required
+                   value="{{ condition.height }}">
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput">专业</label>
+            <input type="text" class="form-control" name="major" placeholder="" required value="{{ condition.major }}">
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput2">家乡</label>
+            <select class="custom-select form-control" name="hometown">
+                {% set x = ['北京', '天津', '河北省', '山西省', '内蒙古自治区', '辽宁省', '吉林省', '黑龙江省', '上海', '江苏省', '浙江省', '安徽省', '福建省', '江西省', '山东省', '河南省', '湖北省', '湖南省', '广东省', '广西壮族自治区', '海南省', '重庆', '四川省', '贵州省', '云南省', '西藏自治区', '陕西省', '甘肃省', '青海省', '宁夏回族自治区', '新疆维吾尔自治区'] %}
+                {% for i in x %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput2">性格</label>
+            <input type="text" class="form-control" name="character" placeholder="" required value="{{ condition.personal }}">
+        </div>
+        <hr class="mb-4">
+        <button type="submit" class="btn btn-primary btn-block">提交</button>
+    </form>
+    <!-- Content here -->
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">© 2019-2019 果壳小红娘</p>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a href="#">Privacy</a></li>
+            <li class="list-inline-item"><a href="#">Terms</a></li>
+            <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+    </footer>
 </div>
 <script>
-  function readURL(input) {
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
 
-      reader.onload = function (e) {
-        $('#picture').attr('src', e.target.result).show();
-      }
+            reader.onload = function (e) {
+                $('<img>').attr('src', e.target.result).appendTo($('#pictures'));
+            }
 
-      reader.readAsDataURL(input.files[0]);
+            reader.readAsDataURL(input.files[0]);
+        }
     }
-  }
 
-  $("#imgInp").change(function () {
-    readURL(this);
-  });
+    $("#imgInp").change(function () {
+        readURL(this);
+    });
 
-  $('#triger_file').click(function () {
-    $("#imgInp").click()
-  })
+    $('#triger_file').click(function () {
+        $("#imgInp").click()
+    })
 
 </script>
 </body>

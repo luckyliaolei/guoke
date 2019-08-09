@@ -19,7 +19,11 @@ def hello_world():
         f.save('picture/' + str(user_info['_id']) + '.jpg')
         return render_template('success.html')
     else:
-        return render_template('index.html')
+        user_id = request.args.get('user_id')
+        user = users.find_one({'_id': user_id})
+        profile = user.get('profile', {})
+        condition = user.get('condition', {})
+        return render_template('index.html', profile=profile, condition=condition)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -47,6 +51,7 @@ class Msg_handle:
 
     def __init__(self, msg):
         self.msg = msg
+        self.url = '<a href="http://www.nipc.org.cn:24255/user_info?user_id=' + msg.source + '">点击此处</a>'
 
     def text_reply(self, content):
         return TextReply(content=content, message=self.msg).render()
@@ -55,7 +60,7 @@ class Msg_handle:
         r_chunk = requests.get(self.msg.image, stream=True)
         # Throw an error for bad status codes
         r_chunk.raise_for_status()
-        with open('picture/' + self.msg.media_id + '.jpg' , 'wb') as handle:
+        with open('static/picture/' + self.msg.media_id + '.jpg' , 'wb') as handle:
             for block in r_chunk.iter_content(1024):
                 handle.write(block)
 
@@ -72,7 +77,7 @@ class Msg_handle:
 
         if self.msg.type == 'event':
             if self.msg.event == 'subscribe' :
-                return self.text_reply('感谢你关注本订阅号，我们承诺不泄露隐私信息，你的信息将会在取消关注本订阅号后自动删除，回复“资料”即可开始填写。由于公众号的限制我们不能主动给你发消息，只能被动恢复消息，所以并不是我们不理你。有事儿没事儿多回复“在吗”，将会有不一样的惊喜等着你哦。')
+                return self.text_reply('感谢你关注本订阅号，我们承诺不泄露隐私信息，你的信息将会在取消关注本订阅号后自动删除，回复“资料”即可开始填写，也可以通过我们的网站填写%s。由于公众号的限制我们不能主动给你发消息，只能被动恢复消息，所以并不是我们不理你。有事儿没事儿多回复“在吗”，将会有不一样的惊喜等着你哦。' % self.url)
             elif self.msg.event == "unsubscribe":
                 pass
             else:
@@ -90,7 +95,7 @@ class Msg_handle:
 
             if question:
                 if user.get(question['_id']):
-                    return self.text_reply('已经回答过该问题')
+                    return self.text_reply('已经回答过该问题, 查看资料请' + self.url)
 
                 users.update_one({
                     '_id': self.msg.source}, {
@@ -105,9 +110,14 @@ class Msg_handle:
                         '$slice': [0, 1]}})['content'][0]
 
                 return self.text_reply(first_qu['question'])
-            elif self.msg.content == '':
-                # todo
-                pass
+            elif self.msg.content == '匹配':
+                self.match()
+
+            elif self.msg.content == '查看资料':
+                self.look()
+
+            elif self.msg.content == '修改资料':
+                self.edit()
 
             if not user.get('profile'):
                 return self.text_reply('你好，是不是有点无聊了，你好像还没上传资料，要不然回复“资料”启动信息采集程序？')
@@ -163,6 +173,11 @@ class Msg_handle:
 
         return self.text_reply(next_qu['question'])
 
+    def match(self):
+        users.find({})
+
+    def look_info(self):
+        users.find({})
 
 if __name__ == '__main__':
     app.run()

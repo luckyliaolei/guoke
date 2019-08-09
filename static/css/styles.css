@@ -1,0 +1,7 @@
+#pictures img{
+    width: 100%;
+}
+
+#pictures img:not(:first-child){
+    padding-top: 10px;
+}
