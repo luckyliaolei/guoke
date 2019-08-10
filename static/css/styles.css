@@ -5,3 +5,7 @@
 #pictures img:not(:first-child){
     padding-top: 10px;
 }
+
+body .pswp__button--share {
+    display: none;
+}

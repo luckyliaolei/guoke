@@ -37,6 +37,12 @@ def info():
         condition = user.get('condition', {})
         return render_template('info.html', profile=profile, condition=condition)
 
+
+@app.route('/test', methods=['GET', 'POST'])
+def test():
+    return render_template("test.html")
+
+
 @app.route('/', methods=['GET', 'POST'])
 def handle():
     data = request.args
@@ -125,10 +131,13 @@ class Msg_handle:
                 self.match()
 
             elif self.msg.content == '查看资料':
-                self.look()
+                return self.text_reply('<a href="http://www.nipc.org.cn:24255/info?user_id=' + self.msg.source + '">查看资料</a>')
+            elif self.msg.content == 'test':
+                return self.text_reply(
+                    '<a href="http://www.nipc.org.cn:24255/test?user_id=' + self.msg.source + '">测试</a>')
 
             elif self.msg.content == '修改资料':
-                self.edit()
+                return self.text_reply(self.url)
 
             if not user.get('profile'):
                 return self.text_reply('你好，是不是有点无聊了，你好像还没上传资料，要不然回复“资料”启动信息采集程序？')
@@ -184,11 +193,6 @@ class Msg_handle:
 
         return self.text_reply(next_qu['question'])
 
-    def match(self):
-        users.find({})
-
-    def look_info(self):
-        users.find({})
 
 if __name__ == '__main__':
     app.run()
