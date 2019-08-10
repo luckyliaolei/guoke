@@ -73,7 +73,11 @@
         </div>
         <div class="form-group">
             <label for="formGroupExampleInput">理想</label>
-            <input type="text" class="form-control" name="idea" placeholder="" required value="{{ profile.ideal }}">
+            <input type="text" class="form-control" name="ideal" placeholder="" required value="{{ profile.ideal }}">
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">用一段话来描述下自己吧，告诉我们你有多厉害</label>
+            <textarea class="form-control" name="discription" rows="3">{{ profile.discription }}</textarea>
         </div>
         <div class="form-group">
             <label for="formGroupExampleInput2">生活照</label>
@@ -85,6 +89,10 @@
             </div>
             <br>
             <button type="button" id="triger_file" class="btn btn-light mb-3">点击选择图片</button>
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput">联系方式，微信号或手机号</label>
+            <input type="text" class="form-control" name="ideal" placeholder="" required value="{{ profile.wechat }}">
         </div>
         <hr class="mb-4">
         <h4 class="mb-3">心动条件</h4>
@@ -114,6 +122,10 @@
         <div class="form-group">
             <label for="formGroupExampleInput2">性格</label>
             <input type="text" class="form-control" name="character" placeholder="" required value="{{ condition.personal }}">
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">补充说明</label>
+            <textarea class="form-control" name="addition" rows="3">{{ condition.addition }}</textarea>
         </div>
         <hr class="mb-4">
         <button type="submit" class="btn btn-primary btn-block">提交</button>

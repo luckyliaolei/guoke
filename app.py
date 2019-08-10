@@ -20,11 +20,22 @@ def hello_world():
         return render_template('success.html')
     else:
         user_id = request.args.get('user_id')
-        user = users.find_one({'_id': user_id})
+        user = users.find_one({'_id': user_id}) or {}
         profile = user.get('profile', {})
         condition = user.get('condition', {})
         return render_template('index.html', profile=profile, condition=condition)
 
+
+@app.route('/info', methods=['GET', 'POST'])
+def info():
+    if request.method == 'POST':
+        pass
+    else:
+        user_id = request.args.get('user_id')
+        user = users.find_one({'_id': user_id}) or {}
+        profile = user.get('profile', {})
+        condition = user.get('condition', {})
+        return render_template('info.html', profile=profile, condition=condition)
 
 @app.route('/', methods=['GET', 'POST'])
 def handle():
