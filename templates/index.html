@@ -1,23 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="/static/images/phkj.jpg">
-    <title>果壳</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/styles.css">
-    <script src="/static/js/jquery-3.3.1.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-</head>
-
-<body class="vsc-initialized bg-light">
-<div class="container">
+{% block container %}
     <div class="py-5 text-center">
         <h2 class="mx-auto">个人资料填写</h2>
         <p class="lead">请认真填写以下信息，我们将通过以下信息给你匹配对的人，我们不会泄露你的隐私，当你取消关注时，你的信息将从数据库中删除。</p>
@@ -65,11 +48,13 @@
         </div>
         <div class="form-group">
             <label for="formGroupExampleInput2">兴趣</label>
-            <input type="text" class="form-control" name="interest" placeholder="" required value="{{ profile.interest }}">
+            <input type="text" class="form-control" name="interest" placeholder="" required
+                   value="{{ profile.interest }}">
         </div>
         <div class="form-group">
             <label for="formGroupExampleInput2">性格</label>
-            <input type="text" class="form-control" name="character" placeholder="" required value="{{ profile.personal }}">
+            <input type="text" class="form-control" name="character" placeholder="" required
+                   value="{{ profile.personal }}">
         </div>
         <div class="form-group">
             <label for="formGroupExampleInput">理想</label>
@@ -82,13 +67,29 @@
         <div class="form-group">
             <label for="formGroupExampleInput2">生活照</label>
             <input type="file" accept="image/jpeg" id="imgInp" name="picture" hidden/>
-            <div id="pictures" class="text-center">
-                {% for img in profile.images %}
-                    <img src="/static/picture/{{ img }}.jpg" width="100%" alt=""/>
-                {% endfor %}
+            <div class="card">
+                <div class="card-body py-2">
+                    <div id="pictures" class="row">
+                        {% for img in profile.images %}
+                            <div class="col-4 p-2">
+                                <a href="/static/picture/{{ img }}.jpg"
+                                   style="background-image: url(/static/picture/{{ img }}.jpg)"></a>
+                            </div>
+                        {% endfor %}
+                        <div id="triger_file" class="col-4 p-2">
+                            <div class="border p-3">
+                                <svg t="1565450558965" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                     xmlns="http://www.w3.org/2000/svg" p-id="2009" width="100%">
+                                    <path d="M980.918297 554.852994 43.079656 554.852994c-23.657816 0-42.856064-19.197224-42.856064-42.8489 0-23.657816 19.198248-42.857087 42.856064-42.857087l937.838641 0c23.697725 0 42.859134 19.199271 42.859134 42.857087C1023.775384 535.655769 1004.616022 554.852994 980.918297 554.852994L980.918297 554.852994z"
+                                          p-id="2010" fill="#9a9a9a"></path>
+                                    <path d="M469.147518 980.917786 469.147518 43.079144c0-23.657816 19.197224-42.856064 42.8489-42.856064 23.657816 0 42.856064 19.198248 42.856064 42.856064l0 937.838641c0 23.697725-19.199271 42.859134-42.856064 42.859134C488.344742 1023.774873 469.147518 1004.615511 469.147518 980.917786L469.147518 980.917786z"
+                                          p-id="2011" fill="#9a9a9a"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <br>
-            <button type="button" id="triger_file" class="btn btn-light mb-3">点击选择图片</button>
         </div>
         <div class="form-group">
             <label for="formGroupExampleInput">联系方式，微信号或手机号</label>
@@ -121,7 +122,8 @@
         </div>
         <div class="form-group">
             <label for="formGroupExampleInput2">性格</label>
-            <input type="text" class="form-control" name="character" placeholder="" required value="{{ condition.personal }}">
+            <input type="text" class="form-control" name="character" placeholder="" required
+                   value="{{ condition.personal }}">
         </div>
         <div class="form-group">
             <label for="exampleFormControlTextarea1">补充说明</label>
@@ -131,37 +133,32 @@
         <button type="submit" class="btn btn-primary btn-block">提交</button>
     </form>
     <!-- Content here -->
-    <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p class="mb-1">© 2019-2019 果壳小红娘</p>
-        <ul class="list-inline">
-            <li class="list-inline-item"><a href="#">Privacy</a></li>
-            <li class="list-inline-item"><a href="#">Terms</a></li>
-            <li class="list-inline-item"><a href="#">Support</a></li>
-        </ul>
-    </footer>
-</div>
-<script>
-    function readURL(input) {
+{% endblock %}
+
+{% block script %}
+    <script>
+      function readURL(input) {
         if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('<img>').attr('src', e.target.result).appendTo($('#pictures'));
-            }
-
-            reader.readAsDataURL(input.files[0]);
+          img = new Image();
+          img.onload = function () {
+            $('<div class="col-4 p-2"><a href="#"></a></div>').insertBefore($('#triger_file')).children().css('background-image', 'url("' + this.src + '")').data('item', {
+              w: this.width,
+              h: this.height,
+              src: this.src,
+              msrc: this.src
+            });
+          };
+          img.src = URL.createObjectURL(input.files[0]);
         }
-    }
+      }
 
-    $("#imgInp").change(function () {
+      $("#imgInp").change(function () {
         readURL(this);
-    });
+      });
 
-    $('#triger_file').click(function () {
+      $('#triger_file').click(function () {
         $("#imgInp").click()
-    })
+      })
 
-</script>
-</body>
-
-</html>
+    </script>
+{% endblock %}

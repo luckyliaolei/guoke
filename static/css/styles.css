@@ -1,11 +1,15 @@
-#pictures img{
+#pictures a{
+    display: inline-block;
     width: 100%;
-}
-
-#pictures img:not(:first-child){
-    padding-top: 10px;
+    padding-top: 100%;
+    background-position: center;
+    background-size: cover;
 }
 
 body .pswp__button--share {
     display: none;
+}
+
+ul li .text-muted{
+    min-width: 70px;
 }

@@ -1,38 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="/static/images/phkj.jpg">
-    <title>果壳</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/styles.css">
-    <script src="/static/js/jquery-3.3.1.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-    <!-- Core CSS file -->
-    <link rel="stylesheet" href="/static/css/photoswipe.css">
-
-    <!-- Skin CSS file (styling of UI - buttons, caption, etc.)
-         In the folder of skin CSS file there are also:
-         - .png and .svg icons sprite,
-         - preloader.gif (for browsers that do not support CSS animations) -->
-    <link rel="stylesheet" href="/static/css/default-skin/default-skin.css">
-
-    <!-- Core JS file -->
-    <script src="/static/js/photoswipe.min.js"></script>
-
-    <!-- UI JS file -->
-    <script src="/static/js/photoswipe-ui-default.min.js"></script>
-       
-</head>
-
-<body class="vsc-initialized bg-light">
-<div class="container">
+{% block container %}
     <div class="py-5 text-center">
         <h2 class="mx-auto">匹配对象</h2>
         <p class="lead">如果你也满意的话，点击确认，你的信息会被推荐到对方，如果对方也满意，那此次匹配成功，我们将会互相推送联系方式。</p>
@@ -109,11 +77,11 @@
     </ul>
     <h4 class="mb-3">照片</h4>
     <div class="card">
-        <div class="card-body">
+        <div class="card-body py-2">
             <div id="pictures" class="row">
                 {% for img in profile.images %}
-                    <div class="col-4">
-                        <img src="/static/picture/{{ img }}.jpg" class="w-100" alt="">
+                    <div class="col-4 p-2">
+                        <a href="/static/picture/{{ img }}.jpg" class="d-inline-block w-100" alt="" style="padding-top: 100%;background-position: center;background-size: cover;background-image: url(/static/picture/{{ img }}.jpg)"></a>
                     </div>
                 {% endfor %}
             </div>
@@ -122,125 +90,4 @@
     <hr class="mb-4">
     <button type="submit" class="btn btn-primary btn-block">不错哟</button>
     <!-- Content here -->
-    <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p class="mb-1">© 2019-2019 果壳小红娘</p>
-        <ul class="list-inline">
-            <li class="list-inline-item"><a href="#">Privacy</a></li>
-            <li class="list-inline-item"><a href="#">Terms</a></li>
-            <li class="list-inline-item"><a href="#">Support</a></li>
-        </ul>
-    </footer>
-</div>
-<!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    <!-- Background of PhotoSwipe.
-         It's a separate element as animating opacity is faster than rgba(). -->
-    <div class="pswp__bg"></div>
-
-    <!-- Slides wrapper with overflow:hidden. -->
-    <div class="pswp__scroll-wrap">
-
-        <!-- Container that holds slides.
-            PhotoSwipe keeps only 3 of them in the DOM to save memory.
-            Don't modify these 3 pswp__item elements, data is added later on. -->
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
-
-        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-        <div class="pswp__ui pswp__ui--hidden">
-
-            <div class="pswp__top-bar">
-
-                <!--  Controls are self-explanatory. Order can be changed. -->
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
-                <!-- element will get class pswp__preloader--active when preloader is running -->
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-<script>
-    var pswpElement = document.querySelectorAll('.pswp')[0];
-    var items = [];
-    function push_item(url, w, h){
-        items.push({
-            src: url,
-            w: w,
-            h: h,
-            msrc: url
-        })
-    }
-    $('#pictures img').each(function () {
-        var img = new Image();
-        img.src = $(this).attr('src');
-        // 如果图片被缓存，则直接返回缓存数据
-        if (img.complete) {
-            push_item(img.src, img.width, img.height);
-        } else {
-            // 完全加载完毕的事件
-            img.onload = function () {
-                push_item(img.src, img.width, img.height);
-            }
-        }
-    }).each(function (index) {
-        $(this).click(function () {
-            var that = this;
-            var options = {index: index, getThumbBoundsFn: function (index) {
-                    // See Options->getThumbBoundsFn section of docs for more info
-                    var thumbnail = that,
-                        pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
-                        rect = thumbnail.getBoundingClientRect();
-
-                    return {x: rect.left, y: rect.top + pageYScroll, w: rect.width};
-                }};
-            // Initializes and opens PhotoSwipe
-            PhotoSwipeUI_Default.shareButtons = null;
-            var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
-            gallery.init();
-        })
-    });
-
-</script>
-<script>
-</script>
-</body>
-
-</html>
+{% endblock %}
