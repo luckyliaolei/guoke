@@ -5,26 +5,37 @@ from wechatpy import parse_message
 from wechatpy.replies import TextReply
 from db import users, questions
 import requests
+import uuid
+import json
+from urllib import parse
 
 import re
 app = Flask(__name__)
 
 
-@app.route('/user_info', methods=['GET', 'POST'])
+@app.route('/edit', methods=['GET', 'POST'])
 def hello_world():
+    user_id = request.args.get('user_id')
     if request.method == 'POST':
-        user_info = dict(request.form)
-        users.insert_one(user_info)
-        f = request.files['picture']
-        f.save('picture/' + str(user_info['_id']) + '.jpg')
-        return render_template('success.html')
+        profile = dict(parse.parse_qsl(request.form.get('profile')))
+        condition = dict(parse.parse_qsl(request.form.get('condition')))
+        profile['images'] = request.form.getlist('images')
+        fs = request.files.getlist('files')
+        for f in fs:
+            u = uuid.uuid1().hex
+            f.save('static/pictures/' + u + '.jpg')
+            profile['images'].append(u)
+        users.update_one({'_id': user_id}, {'$set': {'profile': profile, 'condition': condition}}, upsert=True)
+        return json.dumps({'res': 0})
     else:
-        user_id = request.args.get('user_id')
         user = users.find_one({'_id': user_id}) or {}
         profile = user.get('profile', {})
         condition = user.get('condition', {})
-        return render_template('index.html', profile=profile, condition=condition)
+        return render_template('edit.html', profile=profile, condition=condition)
 
+@app.route('/success', methods=['GET', 'POST'])
+def success():
+    return render_template('success.html')
 
 @app.route('/info', methods=['GET', 'POST'])
 def info():
@@ -37,6 +48,18 @@ def info():
         condition = user.get('condition', {})
         return render_template('info.html', profile=profile, condition=condition)
 
+
+@app.route('/recommend', methods=['GET', 'POST'])
+def recommend_page():
+    if request.method == 'POST':
+        request.form.get('like')
+    else:
+        user_id = request.args.get('user_id')
+
+        result = recommend(user_id)
+        profile = result.get('profile', {})
+        condition = result.get('condition', {})
+        return render_template('recommend.html', profile=profile, condition=condition)
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
@@ -63,12 +86,20 @@ def handle():
     #     reply = TextReply(content=msg.content, message=msg)
     #     return reply.render()
 
+def recommend(user_id):
+    user = users.find_one({
+        '_id': user_id})
+    gender = user['profile']['gender'] == '男' and '女' or '男'
+    return users.find_one({'profile.gender': gender})
 
 class Msg_handle:
 
     def __init__(self, msg):
         self.msg = msg
-        self.url = '<a href="http://www.nipc.org.cn:24255/user_info?user_id=' + msg.source + '">点击此处</a>'
+        self.url = '<a href="http://www.nipc.org.cn:24255/'
+        self.recommend_url = self.get_url('recommend', '好友推荐')
+        self.info_url = self.get_url('info', '个人资料')
+        self.edit_url = self.get_url('edit', '资料编辑')
 
     def text_reply(self, content):
         return TextReply(content=content, message=self.msg).render()
@@ -77,9 +108,12 @@ class Msg_handle:
         r_chunk = requests.get(self.msg.image, stream=True)
         # Throw an error for bad status codes
         r_chunk.raise_for_status()
-        with open('static/picture/' + self.msg.media_id + '.jpg' , 'wb') as handle:
+        with open('static/pictures/' + self.msg.media_id + '.jpg' , 'wb') as handle:
             for block in r_chunk.iter_content(1024):
                 handle.write(block)
+
+    def get_url(self, path, name):
+        return self.url + path + '?user_id=' + self.msg.source + '">' + name + '</a>'
 
     def msg_hendle(self):
         user = users.find_one({
@@ -94,7 +128,7 @@ class Msg_handle:
 
         if self.msg.type == 'event':
             if self.msg.event == 'subscribe' :
-                return self.text_reply('感谢你关注本订阅号，我们承诺不泄露隐私信息，你的信息将会在取消关注本订阅号后自动删除，回复“资料”即可开始填写，也可以通过我们的网站填写%s。由于公众号的限制我们不能主动给你发消息，只能被动恢复消息，所以并不是我们不理你。有事儿没事儿多回复“在吗”，将会有不一样的惊喜等着你哦。' % self.url)
+                return self.text_reply('感谢你关注本订阅号，我们承诺不泄露隐私信息，你的信息将会在取消关注本订阅号后自动删除，回复“资料”启动智能小客服采集资料，也可以点击\n%s\n通过网页进行填写。由于公众号的限制我们不能主动给你发消息，只能被动恢复消息，所以并不是我们不理你。有事儿没事儿多回复“在吗”，将会有不一样的惊喜等着你哦。' % self.edit_url)
             elif self.msg.event == "unsubscribe":
                 pass
             else:
@@ -112,7 +146,7 @@ class Msg_handle:
 
             if question:
                 if user.get(question['_id']):
-                    return self.text_reply('已经回答过该问题, 查看资料请' + self.url)
+                    return self.text_reply('已经回答过该问题, 查看资料请访问')
 
                 users.update_one({
                     '_id': self.msg.source}, {
@@ -127,23 +161,15 @@ class Msg_handle:
                         '$slice': [0, 1]}})['content'][0]
 
                 return self.text_reply(first_qu['question'])
-            elif self.msg.content == '匹配':
-                self.match()
 
-            elif self.msg.content == '查看资料':
-                return self.text_reply('<a href="http://www.nipc.org.cn:24255/info?user_id=' + self.msg.source + '">查看资料</a>')
             elif self.msg.content == 'test':
-                return self.text_reply(
-                    '<a href="http://www.nipc.org.cn:24255/test?user_id=' + self.msg.source + '">测试</a>')
-
-            elif self.msg.content == '修改资料':
-                return self.text_reply(self.url)
+                return self.text_reply(self.get_url('test', '测试'))
 
             if not user.get('profile'):
-                return self.text_reply('你好，是不是有点无聊了，你好像还没上传资料，要不然回复“资料”启动信息采集程序？')
+                return self.text_reply('你好，是不是有点无聊了，你好像还没上传基本资料，你可以点击\n%s\n或回复“资料”启动智能小客服采集资料？' % self.edit_url)
             if not user.get('condition'):
-                return self.text_reply('你好，是不是有点无聊了，你好像还没上传择偶条件，要不然回复“条件”启动信息采集程序？')
-            return self.text_reply('没事儿干了吗，可以回答问题玩哦，你的回答将会被我们推送到我们算法给你匹配到的跟你合适的人的那里，如果Ta对你的回答感兴趣，我们也会推送他的消息给你哦，当你们的熟悉程度到达一定值后，我们将互相推送微信号，在此之前你们所有信息都是匿名的哦，回复“问题”查看问题列表')
+                return self.text_reply('你好，是不是有点无聊了，你好像还没上传心动条件，你可以点击\n%s\n或回复“条件”启动智能小客服采集资料？' % self.edit_url)
+            return self.text_reply('你好，欢迎来到小红娘公众号，快来看看小红娘都有哪些功能吧:\n\n%s\n\n%s\n\n%s' % (self.recommend_url, self.info_url, self.edit_url))
 
     def answer(self, question_id, question_index):
         last_qu, next_qu = questions.find_one({

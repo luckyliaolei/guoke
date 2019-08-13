@@ -3450,7 +3450,7 @@ _registerModule('DesktopZoom', {
  * - Back button to close gallery.
  * 
  * - Unique URL for each slide: example.com/&pid=1&gid=3
- *   (where PID is picture index, and GID and gallery index)
+ *   (where PID is pictures index, and GID and gallery index)
  *   
  * - Switch URL when slides change.
  * 
