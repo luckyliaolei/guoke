@@ -2,99 +2,111 @@
 
 {% block title %}好友推荐{% endblock %}
 {% block container %}
-    <div class="py-5 text-center d-none">
-        <h2 class="mx-auto">好友推荐</h2>
-        <p class="lead">如果你也满意的话，点击确认，你的信息会被推荐到对方，如果对方也满意，那此次匹配成功，我们将会互相推送联系方式。你的每一次选择将被我们记下来，我们将通过算法分析出你的喜好来，所以当你查看的次数越多，我们将对你越了解，未来推送也会越精准。请记住点击喜欢要慎重，所以每周可以为你推荐三个人，但是你只能给一个人点击喜欢。</p>
+  <div class="py-5 text-center d-none">
+    <h2 class="mx-auto">好友推荐</h2>
+    <p class="lead">
+      如果你也满意的话，点击确认，你的信息会被推荐到对方，如果对方也满意，那此次匹配成功，我们将会互相推送联系方式。你的每一次选择将被我们记下来，我们将通过算法分析出你的喜好来，所以当你查看的次数越多，我们将对你越了解，未来推送也会越精准。请记住点击喜欢要慎重，所以每周可以为你推荐三个人，但是你只能给一个人点击喜欢。</p>
+  </div>
+  <h4 class="mb-3">基本资料</h4>
+  <ul class="list-group mb-3">
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">姓名</span>
+      {{ profile.name }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">性别</span>
+      {{ profile.gender }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">年龄</span>
+      {{ profile.age }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">身高</span>
+      {{ profile.height }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">专业</span>
+      {{ profile.major }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">家乡</span>
+      {{ profile.hometown }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">兴趣</span>
+      {{ profile.interest }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">性格</span>
+      {{ profile.personal }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">理想</span>
+      {{ profile.ideal }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">自我介绍</span>
+      {{ profile.discription }}
+    </li>
+  </ul>
+  <h4 class="mb-3">心动条件</h4>
+  <ul class="list-group mb-3">
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">年龄区间</span>
+      {{ condition.age }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">身高要求</span>
+      {{ condition.height }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">专业</span>
+      {{ condition.major }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">地域</span>
+      {{ condition.hometown }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">性格</span>
+      {{ condition.personal }}
+    </li>
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="text-muted">附加</span>
+      {{ condition.addition }}
+    </li>
+  </ul>
+  <h4 class="mb-3">照片</h4>
+  <div class="card">
+    <div class="card-body py-2">
+      <div id="pictures" class="row">
+        {% for img in profile.images %}
+          <div class="col-4 p-2">
+            <a href="/static/pictures/{{ img }}.jpg" alt=""
+               style="background-image: url(/static/pictures/{{ img }}.jpg)"
+            ></a>
+          </div>
+        {% endfor %}
+      </div>
     </div>
-    <h4 class="mb-3">基本资料</h4>
-    <ul class="list-group mb-3">
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">姓名</span>
-            {{ profile.name }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">性别</span>
-            {{ profile.gender }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">年龄</span>
-            {{ profile.age }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">身高</span>
-            {{ profile.height }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">专业</span>
-            {{ profile.major }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">家乡</span>
-            {{ profile.hometown }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">兴趣</span>
-            {{ profile.interest }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">性格</span>
-            {{ profile.personal }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">理想</span>
-            {{ profile.ideal }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">自我介绍</span>
-            {{ profile.discription }}
-        </li>
-    </ul>
-    <h4 class="mb-3">心动条件</h4>
-    <ul class="list-group mb-3">
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">年龄区间</span>
-            {{ condition.age }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">身高要求</span>
-            {{ condition.height }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">专业</span>
-            {{ condition.major }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">地域</span>
-            {{ condition.hometown }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">性格</span>
-            {{ condition.personal }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="text-muted">附加</span>
-            {{ condition.addition }}
-        </li>
-    </ul>
-    <h4 class="mb-3">照片</h4>
-    <div class="card">
-        <div class="card-body py-2">
-            <div id="pictures" class="row">
-                {% for img in profile.images %}
-                    <div class="col-4 p-2">
-                        <a href="/static/pictures/{{ img }}.jpg" alt="" style="background-image: url(/static/pictures/{{ img }}.jpg)"
-                           ></a>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
+  </div>
+  <hr class="mb-4">
+  <div class="row">
+    <div class="col">
+      <button type="button" class="btn btn-outline-primary btn-block">上一页</button>
     </div>
-    <hr class="mb-4">
-    <div class="row">
-        <div class="col">
-            <button type="submit" class="btn btn-default btn-block">算了，算了</button></div>
-        <div class="col">
-            <button type="submit" class="btn btn-danger btn-block">不错哟</button></div>
+    <div class="col-3">
+      <div class="text-center pt-2"><span class="text-primary">1</span>/3</div>
     </div>
-    <!-- Content here -->
+    <div class="col">
+      <button type="button" class="btn btn-outline-primary btn-block">下一页</button>
+    </div>
+  </div>
+  <script>
+    $('#like').click(function () {
+      $(this).find('i').toggleClass('fas').toggleClass('far').toggleClass('text-danger');
+    })
+  </script>
+  <!-- Content here -->
 {% endblock %}

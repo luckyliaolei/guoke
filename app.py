@@ -7,6 +7,7 @@ from db import users, questions
 import requests
 import uuid
 import json
+import datetime
 from urllib import parse
 
 import re
@@ -89,7 +90,12 @@ def handle():
 def recommend(user_id):
     user = users.find_one({
         '_id': user_id})
-    gender = user['profile']['gender'] == '男' and '女' or '男'
+    gender = user['profile'].get('gender', '女') == '男' and '女' or '男'
+    like = {
+        'user_id': user['_id'],
+        'date': datetime.datetime.now(),
+        'like': True
+    }
     return users.find_one({'profile.gender': gender})
 
 class Msg_handle:
