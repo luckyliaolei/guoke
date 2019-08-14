@@ -91,7 +91,23 @@
       </div>
     </div>
   </div>
-  <hr class="mb-4">
+  <div class="row mt-4">
+    <div class="col">
+      {% if like.store %}
+        <button id="store" type="button" class="btn btn-secondary btn-block" data-stat=true>已收藏</button>
+      {% else %}
+        <button id="store" type="button" class="btn btn-outline-secondary btn-block">收藏</button>
+      {% endif %}
+    </div>
+    <div class="col">
+      {% if like.like %}
+        <button id="like" type="button" class="btn btn-secondary btn-block" data-stat=true>已喜欢</button>
+      {% else %}
+        <button id="like" type="button" class="btn btn-danger btn-block">不错哟</button>
+      {% endif %}
+    </div>
+  </div>
+  <hr class="mt-4">
   <div class="row">
     <div class="col">
       <button type="button" class="btn btn-outline-primary btn-block">上一页</button>
@@ -104,9 +120,21 @@
     </div>
   </div>
   <script>
+    var uuid = "{{ like.uuid }}";
+    $('#store').click(function () {
+      $(this).attr('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">');
+      var status = !$(this).data('stat');
+      $.post('/recommend' + location.search, {action: 'store', value: status, uuid:uuid}, function () {
+        $(this).data('stat', status).removeClass('btn-outline-secondary btn-secondary').attr('disabled', false).addClass(status&& 'btn-secondary'|| 'btn-outline-secondary').html(status && '已收藏' || '收藏').blur();
+      }.bind(this));
+    });
     $('#like').click(function () {
-      $(this).find('i').toggleClass('fas').toggleClass('far').toggleClass('text-danger');
-    })
+      $(this).attr('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">');
+      var status = !$(this).data('stat');
+      $.post('/recommend' + location.search, {action: 'like', value: status, uuid: uuid}, function () {
+        $(this).data('stat', status).removeClass('btn-danger btn-secondary').attr('disabled', false).addClass(status && 'btn-secondary' || 'btn-danger').html(status && '已喜欢' || '不错哟').blur();
+      }.bind(this));
+    });
   </script>
   <!-- Content here -->
 {% endblock %}

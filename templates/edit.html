@@ -74,7 +74,8 @@
               {% for img in profile.images %}
                 <div class="col-4 p-2">
                   <a href="/static/pictures/{{ img }}.jpg"
-                     style="background-image: url(/static/pictures/{{ img }}.jpg)" data-image_id="{{ img }}"></a>
+                     style="background-image: url(/static/pictures/{{ img }}.jpg)" data-image_id="{{ img }}"><img
+                      src="/static/images/svg/delete.svg" alt=""></a>
                 </div>
               {% endfor %}
               <div id="triger_file" class="col-4 p-2">
@@ -150,7 +151,8 @@
       if (input.files && input.files[0]) {
         img = new Image();
         img.onload = function () {
-          $('<div class="col-4 p-2"><a href="#" class="new"></a></div>').insertBefore($('#triger_file')).children('a').css('background-image', 'url("' + this.src + '")').data('item', {
+          $('<div class="col-4 p-2"><a href="#" class="new"><img\n' +
+              '                      src="/static/images/svg/delete.svg" alt=""></a></div>').insertBefore($('#triger_file')).children('a').css('background-image', 'url("' + this.src + '")').data('item', {
             w: this.width,
             h: this.height,
             src: this.src,
@@ -193,6 +195,10 @@
           location =  '/success'
         }
       });
+      return false;
+    })
+    $('#pictures').on('click', 'a img', function () {
+      $(this).closest('div').remove();
       return false;
     })
   </script>
